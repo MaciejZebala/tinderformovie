@@ -1,0 +1,11 @@
+import styled from 'styled-components';
+
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  width: 400px;
+  margin: 0 auto;
+  background-color: ${({ theme }) => theme.colors.lightGrey};
+`;
