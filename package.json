@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@mswjs/data": "^0.7.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -11,6 +10,7 @@
     "@types/node": "^12.20.34",
     "@types/react": "^17.0.31",
     "@types/react-dom": "^17.0.10",
+    "axios": "^0.24.0",
     "faker": "^5.5.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -50,6 +50,8 @@
     ]
   },
   "devDependencies": {
+    "@mswjs/data": "^0.7.0",
+    "@types/faker": "^5.5.9",
     "@types/styled-components": "^5.1.15",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.32.0",
@@ -59,5 +61,8 @@
     "lint-staged": "^11.1.2",
     "msw": "^0.35.0",
     "prettier": "^2.4.1"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
