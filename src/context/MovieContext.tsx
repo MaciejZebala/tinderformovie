@@ -5,7 +5,8 @@ import { Movie } from '../types/movie.types';
 type AppState = typeof initialState;
 type Action =
   | { type: 'INCREASE_PAGE' }
-  | { type: 'GET_MOVIES'; payload: Movie };
+  | { type: 'GET_MOVIES'; payload: Movie[] }
+  | { type: 'LOADING_MOVIE' };
 
 interface MovieProviderProps {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   isError: false,
-  data: {},
+  data: [] as Movie[],
 };
 const studentsAPI = axios.create({});
 
@@ -25,11 +26,22 @@ const reducer = (state: AppState, action: Action) => {
       return {
         ...state,
         page: state.page + 1,
+        data: state.data.slice(0, -1),
       };
     case 'GET_MOVIES':
       return {
         ...state,
-        data: action.payload,
+        isLoading: false,
+        isSuccess: true,
+        isError: false,
+        data: [...action.payload, ...state.data],
+      };
+    case 'LOADING_MOVIE':
+      return {
+        ...state,
+        isLoading: true,
+        isSuccess: false,
+        isError: false,
       };
     default:
       return state;
@@ -48,6 +60,7 @@ function MoviesContextProvider({ children }: MovieProviderProps) {
 
   useEffect(() => {
     async function fetchData() {
+      dispatch({ type: 'LOADING_MOVIE' });
       try {
         const result = await studentsAPI.get(
           `/recomendations?page=${state.page}`

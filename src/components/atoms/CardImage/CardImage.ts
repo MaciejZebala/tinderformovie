@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
 interface ImageProps {
-  readonly img: string;
+  readonly imgUrl: string;
 }
 
-export const Wrapper = styled.div<ImageProps>`
+export const CardImage = styled.div<ImageProps>`
   width: 100%;
-  height: 70%;
+  height: 50%;
   border-radius: 50px;
-  background-image: ${({ img }) => `url(${img})`};
+  background-image: ${({ imgUrl }) => `url(${imgUrl})`};
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;

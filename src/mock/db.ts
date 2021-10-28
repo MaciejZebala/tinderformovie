@@ -14,7 +14,7 @@ export const db = factory({
 
 export const createMovieData = (): Movie => ({
   id: faker.datatype.uuid(),
-  imgUrl: faker.image.imageUrl(),
+  imgUrl: faker.image.avatar(),
   title: faker.random.words(),
   summary: faker.lorem.paragraphs(),
   rating: faker.datatype.float({ min: 0, max: 10 }),
