@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 
 export const CardWrapper = styled.div`
-  /* display: flex;
+  display: flex;
   flex-direction: column;
-  justify-content: center; */
-  position: relative;
-  /* justify-content: center; */
+  justify-content: space-around;
+  align-items: center;
   width: 400px;
   height: 100%;
   padding: 30px 20px;

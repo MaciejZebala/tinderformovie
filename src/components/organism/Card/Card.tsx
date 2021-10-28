@@ -1,18 +1,16 @@
-import axios from 'axios';
-import { type } from 'os';
-import React, { FC, useContext, useEffect } from 'react';
+import { FC, useContext } from 'react';
 import TinderCard from 'react-tinder-card';
 import styled from 'styled-components';
 import { MoviesContext } from '../../../context/MovieContext';
-import { Movie } from '../../../types/movie.types';
+
 import { CardImage } from '../../atoms/CardImage/CardImage';
 import { ButtonsWrapper } from '../../molecules/ButtonsWrapper/ButtonsWrapper';
 import { MovieInfo } from '../../molecules/MovieInfo/MovieInfo';
+import { Rating } from '../../molecules/Rating/Rating';
 
 import { CardWrapper } from './Card.styles';
 
 const StyledTinderCard = styled(TinderCard)`
-  position: absolute;
   height: 75%;
   padding: 10px;
   border-radius: 50px;
@@ -21,20 +19,16 @@ const StyledTinderCard = styled(TinderCard)`
 `;
 
 export const Card: FC = () => {
-  // const movieApi = axios.create({});
-  // useEffect(() => {
-  //   movieApi.get('/recomendations').then((res) => console.log(res));
-  // }, []);
+  const { state, rejectMovie, acceptMovie } = useContext(MoviesContext);
 
-  const { state, dispatch } = useContext(MoviesContext);
-  const handleAddPage = () => {
-    // console.log(id);
-    // console.log(state.data[1].id);
-    // if (id === state.data[1].id) {
-    dispatch({ type: 'INCREASE_PAGE' });
-    // }
+  const handleAddPage = (dir: string, id: string) => {
+    if (dir === 'left') {
+      acceptMovie(id);
+    } else {
+      rejectMovie(id);
+    }
   };
-  console.log(state);
+
   if (state.isLoading) {
     return <p>Loading..</p>;
   }
@@ -43,17 +37,23 @@ export const Card: FC = () => {
       {state.data.map((movie, index) => {
         const { id, title, rating, summary, imgUrl } = movie;
         return (
-          <StyledTinderCard
-            preventSwipe={['up', 'down', 'left']}
-            onSwipe={(dir) => handleAddPage()}
-          >
-            <CardImage imgUrl={imgUrl} />
-            <MovieInfo title={title} summary={summary} />
-          </StyledTinderCard>
+          <>
+            <Rating rating={rating} />
+            <StyledTinderCard
+              preventSwipe={['up', 'down']}
+              onSwipe={(dir) => handleAddPage(dir, id)}
+            >
+              <CardImage imgUrl={imgUrl} />
+              <MovieInfo title={title} summary={summary} />
+            </StyledTinderCard>
+            <ButtonsWrapper
+              reject={() => rejectMovie(id)}
+              accept={() => acceptMovie(id)}
+            />
+          </>
         );
       })}
       {state.data.length === 0 && <p>Koniec</p>}
-      <ButtonsWrapper onClick={handleAddPage} />
     </CardWrapper>
   );
 };

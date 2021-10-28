@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useReducer, createContext } from 'react';
+import { useMovies } from '../components/hooks/useMovies';
 import { Movie } from '../types/movie.types';
 
 type AppState = typeof initialState;
-type Action =
+export type Action =
   | { type: 'INCREASE_PAGE' }
   | { type: 'GET_MOVIES'; payload: Movie[] }
   | { type: 'LOADING_MOVIE' };
@@ -18,7 +19,13 @@ const initialState = {
   isError: false,
   data: [] as Movie[],
 };
-const studentsAPI = axios.create({});
+
+interface ContextValue {
+  state: AppState;
+  dispatch: React.Dispatch<Action>;
+  rejectMovie: (id: string) => void;
+  acceptMovie: (id: string) => void;
+}
 
 const reducer = (state: AppState, action: Action) => {
   switch (action.type) {
@@ -48,11 +55,7 @@ const reducer = (state: AppState, action: Action) => {
   }
 };
 
-const MoviesContext = createContext<{
-  state: AppState;
-  dispatch: React.Dispatch<Action>;
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-}>({ state: initialState, dispatch: () => {} });
+const MoviesContext = createContext<ContextValue>({} as ContextValue);
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function MoviesContextProvider({ children }: MovieProviderProps) {
@@ -62,9 +65,7 @@ function MoviesContextProvider({ children }: MovieProviderProps) {
     async function fetchData() {
       dispatch({ type: 'LOADING_MOVIE' });
       try {
-        const result = await studentsAPI.get(
-          `/recomendations?page=${state.page}`
-        );
+        const result = await axios.get(`/recomendations?page=${state.page}`);
 
         dispatch({ type: 'GET_MOVIES', payload: result.data.movies });
       } catch (e) {
@@ -74,8 +75,12 @@ function MoviesContextProvider({ children }: MovieProviderProps) {
     fetchData();
   }, [state.page]);
 
+  const { rejectMovie, acceptMovie } = useMovies(dispatch);
+
   return (
-    <MoviesContext.Provider value={{ state, dispatch }}>
+    <MoviesContext.Provider
+      value={{ state, dispatch, rejectMovie, acceptMovie }}
+    >
       {children}
     </MoviesContext.Provider>
   );

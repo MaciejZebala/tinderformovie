@@ -13,4 +13,40 @@ export const movieHandler = [
       })
     );
   }),
+
+  rest.post('/reject/:id', (req, res, ctx) => {
+    if (req.params.id) {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: 'rejected',
+        })
+      );
+    } else {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          error: 'No matching movie',
+        })
+      );
+    }
+  }),
+
+  rest.post('/accept/:id', (req, res, ctx) => {
+    if (req.params.id) {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: 'accepted',
+        })
+      );
+    } else {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          error: 'No matching movie',
+        })
+      );
+    }
+  }),
 ];
