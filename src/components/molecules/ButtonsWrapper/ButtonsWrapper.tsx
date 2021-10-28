@@ -4,13 +4,17 @@ import { Wrapper } from './ButtonsWrapper.styles';
 import { MdOutlineDone } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
 
-export const ButtonsWrapper: FC = () => {
+interface ButtonWrapperProps {
+  onClick: () => void;
+}
+
+export const ButtonsWrapper = ({ onClick }: ButtonWrapperProps) => {
   return (
     <Wrapper>
-      <Button reject={false}>
+      <Button reject={false} onClick={onClick}>
         <MdOutlineDone />
       </Button>
-      <Button reject={true}>
+      <Button reject={true} onClick={onClick}>
         <IoMdClose />
       </Button>
     </Wrapper>
